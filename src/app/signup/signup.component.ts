@@ -5,15 +5,15 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SignupService } from '../services/signup.service';
 import { SignupModel } from '../models/signup.model';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
+import {ToastrModule, ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [
-    RouterLink, 
-    RouterModule, 
-    ReactiveFormsModule, 
+    RouterLink,
+    RouterModule,
+    ReactiveFormsModule,
     CommonModule,
     ToastrModule
   ],
@@ -32,7 +32,7 @@ export class SignupComponent {
   ) {
     this.signupForm = this.formBuilder.group({
       email: ['', [
-        Validators.required, 
+        Validators.required,
         Validators.email
       ]],
       password: ['', [
@@ -40,17 +40,17 @@ export class SignupComponent {
         Validators.minLength(8),
       ]],
       confirmPassword: ['', Validators.required]
-    }, { 
-      validators: this.passwordMatchValidator 
+    }, {
+      validators: this.passwordMatchValidator
     });
   }
 
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    
-    return password && confirmPassword && password.value === confirmPassword.value 
-      ? null 
+
+    return password && confirmPassword && password.value === confirmPassword.value
+      ? null
       : { passwordMismatch: true };
   }
 
