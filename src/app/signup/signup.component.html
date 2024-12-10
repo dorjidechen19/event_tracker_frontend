@@ -1,73 +1,71 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e]">
-  <!-- Form Container -->
-  <div class="w-full max-w-sm relative bg-white shadow-xl overflow-hidden" style="box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);">
-
-    <!-- Create Account Header Area (White Background) -->
-    <div class="bg-white text-[#663399] text-center py-6">
-      <h2 class="text-3xl font-bold mb-0">Create an Account</h2>
-    </div>
-
-    <!-- Form Section (Purple Background with Curved Top) -->
-    <div class="bg-[#663399] px-8 py-4 shadow-lg" style="border-top-left-radius: 60% 60px; border-top-right-radius: 60% 60px; padding-top: 40px;">
+<div class="wrapper">
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+      <h2 class="text-2xl font-bold text-gray-700 text-center mb-6" style="margin-top: 40px; margin-bottom:50px; color: rgb(58, 228, 58)">Create an Account</h2>
       <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
 
         <!-- Email Field -->
-        <div class="mb-6">
-          <label for="email" class="block text-lg font-semibold text-white mb-2">Email</label>
+        <div class="mb-4">
+          <!-- <label for="email" class="block text-sm font-medium text-gray-700">Email</label> -->
           <input
             id="email"
             formControlName="email"
             type="email"
-            class="w-full h-10 bg-gray-100 text-black rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter your email">
-          <div *ngIf="submitted && f['email'].errors" class="text-sm text-red-500 mt-2">
-            <small *ngIf="f['email'].errors['required']">Email is required</small>
-            <small *ngIf="f['email'].errors['email']">Invalid email format</small>
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="enter your email">
+          <div *ngIf="submitted && f['email'].errors" class="text-sm text-red-500 mt-1">
+            <small *ngIf="f['email'].errors?.['required']"><span style="color: red;">Email is required</span></small>
+            <small *ngIf="f['email'].errors?.['email']"><span style="color: red;">Invalid email formate</span></small>
           </div>
         </div>
 
         <!-- Password Field -->
-        <div class="mb-6">
-          <label for="password" class="block text-lg font-semibold text-white mb-2">Password</label>
+        <div class="mb-4">
+          <!-- <label for="password" class="block text-sm font-medium text-gray-700">Password</label> -->
           <input
             id="password"
             formControlName="password"
             type="password"
-            class="w-full h-10 bg-gray-100 text-black rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter your password">
-          <div *ngIf="submitted && f['password'].errors" class="text-sm text-red-500 mt-2">
-            <small *ngIf="f['password'].errors['required']">Password is required</small>
-            <small *ngIf="f['password'].errors['minlength']">Password too short</small>
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="enter your password">
+          <div *ngIf="submitted && f['password'].errors" class="text-sm text-red-500 mt-1">
+            <small *ngIf="f['password'].errors?.['required']"><span style="color: red;">Password is required</span></small>
+            <small *ngIf="f['password'].errors?.['minlength']"><span style="color: red;">Password is too short</span></small>
           </div>
         </div>
 
         <!-- Confirm Password Field -->
-        <div class="mb-6">
-          <label for="confirmPassword" class="block text-lg font-semibold text-white mb-2">Confirm Password</label>
+        <div class="mb-4">
+          <!-- <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label> -->
           <input
             id="confirmPassword"
             formControlName="confirmPassword"
             type="password"
-            class="w-full h-10 bg-gray-100 text-black rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Confirm your password">
-          <div *ngIf="submitted && f['confirmPassword'].errors" class="text-sm text-red-500 mt-2">
-            <small *ngIf="f['confirmPassword'].errors['required']">Confirm password is required</small>
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="confirm your password">
+          <div *ngIf="submitted && f['confirmPassword'].errors" class="text-sm text-red-500 mt-1">
+            <small *ngIf="f['confirmPassword'].errors?.['required']"><span style="color: red;">Confirm password is required</span></small>
           </div>
-          <div *ngIf="signupForm.errors?.['passwordMismatch']" class="text-sm text-red-500 mt-2">
-            <small>Passwords do not match</small>
+          <div *ngIf="signupForm.errors?.['passwordMismatch']" class="text-sm text-red-500 mt-1">
+            <small><span style="color: red;">Password doesn't match</span></small>
           </div>
         </div>
 
         <!-- Submit Button -->
         <button
           type="submit"
-          class="w-full h-10 bg-[#573b8a] text-white font-semibold rounded-md transition duration-300 transform hover:bg-[#6d44b8] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
           Sign Up
         </button>
       </form>
 
-      <div class="text-center mt-2">
-        <p class="text-sm text-white">
+      <!-- Error Message -->
+      <!-- <div *ngIf="errorMessage" class="mt-4 text-sm text-red-500 text-center">
+        {{ errorMessage }}
+      </div> -->
+
+      <div class="text-center mt-4">
+        <p class="text-sm text-gray-600">
           Already have an account?
           <a routerLink="/login" class="text-blue-600 hover:underline">Log In</a>
         </p>
@@ -75,3 +73,4 @@
     </div>
   </div>
 </div>
+
