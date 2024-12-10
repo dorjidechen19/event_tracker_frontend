@@ -1,52 +1,68 @@
-<div class="box" style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0fff0; overflow: hidden; position: relative; width: 100%; font-family: 'Poppins', sans-serif;">
-  <div class="form" style="background: #28292d; padding: 50px 40px; border-radius: 8px; width: 380px; height: 420px; display: flex; flex-direction: column; position: relative; z-index: 10; transition: all 0.3s ease; border: 2px solid transparent; border-radius: 8px; padding: 40px; transition: border 0.4s ease;">
-    <h2 style="color: #45f3ff; font-weight: 500; text-align: center; letter-spacing: 0.1em; transition: 0.5s;">Sign In</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate style="width: 100%; display: flex; flex-direction: column;">
-      <!-- Email Field -->
-      <div class="inputbox" style="position: relative; width: 100%; margin-top: 35px;">
-        <input id="email" formControlName="email" type="email" required="required" placeholder=" "
-               style="position: relative; width: 100%; padding: 10px 10px; background: transparent; border: none; outline: none; font-size: 1em; letter-spacing: 0.05em; z-index: 2; color: white; border-bottom: 2px solid #8f8f8f; transition: all 0.3s ease;"
-               onfocus="this.style.borderBottom='2px solid #45f3ff'; this.nextElementSibling.style.transform='translateY(-30px)'; this.closest('.form').style.border = '2px solid #45f3ff';"
-               onblur="if(!this.value) { this.style.borderBottom='2px solid #8f8f8f'; this.nextElementSibling.style.transform='translateY(0)'; this.closest('.form').style.border = '2px solid transparent'; }" />
-        <span style="position: absolute; color: #8f8f8f; left: 0; padding: 20px 0 10px 0; font-size: 1em; pointer-events: none; letter-spacing: 0.05em; transform: translateY(0); transition: 0.3s ease;">
-          Email
-        </span>
-        <div *ngIf="submitted && f['email'].errors" style="color: red; font-size: 0.8em; margin-top: 5px;">
-          <small *ngIf="f['email'].errors['required']">Email is required</small>
-          <small *ngIf="f['email'].errors['email']">Invalid email format</small>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e]">
+  <div class="w-full max-w-sm bg-white shadow-xl rounded-lg overflow-hidden">
+    <!-- Sign In Header -->
+    <div class="bg-[#663399] text-white text-center py-10 pb-16">
+      <h2 class="text-3xl font-bold mt-0">Sign In</h2>
+    </div>
+
+    <!-- Form Section -->
+    <div class="bg-white px-10 py-6" style="border-top-left-radius: 60% 60px; border-top-right-radius: 60% 60px; padding-top: 40px; margin-top: -50px; box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+        <!-- Email Field -->
+        <div class="mb-6">
+          <label for="email" class="block text-lg font-semibold text-gray-800 mb-3">Email</label>
+          <input
+            id="email"
+            formControlName="email"
+            type="email"
+            class="w-full h-12 bg-gray-100 text-gray-900 rounded-md px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your email" />
+          <div *ngIf="submitted && f['email'].errors" class="text-sm text-red-500 mt-2">
+            <small *ngIf="f['email'].errors['required']">Email is required</small>
+            <small *ngIf="f['email'].errors['email']">Invalid email format</small>
+          </div>
         </div>
-      </div>
 
-      <!-- Password Field -->
-      <div class="inputbox" style="position: relative; width: 100%; margin-top: 35px;">
-        <input id="password" formControlName="password" type="password" required="required" placeholder=" "
-               style="position: relative; width: 100%; padding: 10px 10px; background: transparent; border: none; outline: none; font-size: 1em; letter-spacing: 0.05em; z-index: 2; color: white; border-bottom: 2px solid #8f8f8f; transition: all 0.3s ease;"
-               onfocus="this.style.borderBottom='2px solid #45f3ff'; this.nextElementSibling.style.transform='translateY(-30px)'; this.closest('.form').style.border = '2px solid #45f3ff';"
-               onblur="if(!this.value) { this.style.borderBottom='2px solid #8f8f8f'; this.nextElementSibling.style.transform='translateY(0)'; this.closest('.form').style.border = '2px solid transparent'; }" />
-        <span style="position: absolute; color: #8f8f8f; left: 0; padding: 20px 0 10px 0; font-size: 1em; pointer-events: none; letter-spacing: 0.05em; transform: translateY(0); transition: 0.3s ease;">
-          Password
-        </span>
-        <div *ngIf="submitted && f['password'].errors" style="color: red; font-size: 0.8em; margin-top: 5px;">
-          <small *ngIf="f['password'].errors['required']">Password is required</small>
-          <small *ngIf="f['password'].errors['minlength']">Password too short</small>
+        <!-- Password Field -->
+        <div class="mb-6">
+          <label for="password" class="block text-lg font-semibold text-gray-800 mb-3">Password</label>
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            class="w-full h-12 bg-gray-100 text-gray-900 rounded-md px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your password" />
+          <div *ngIf="submitted && f['password'].errors" class="text-sm text-red-500 mt-2">
+            <small *ngIf="f['password'].errors['required']">Password is required</small>
+            <small *ngIf="f['password'].errors['minlength']">Password too short</small>
+          </div>
         </div>
+
+        <!-- Forgot Password -->
+        <div class="text-right mb-4">
+          <a routerLink="/forgot-password" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full h-12 bg-[#573b8a] text-white font-semibold rounded-md transition duration-300 hover:bg-[#6d44b8] focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Log In
+        </button>
+      </form>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="mt-4 text-sm text-red-500 text-center">
+        {{ errorMessage }}
       </div>
 
-      <!-- Links -->
-      <div class="links" style="display: flex; justify-content: space-between; margin-top: 20px;">
-        <a href="#" style="font-size: 0.9em; color: #8f8f8f; text-decoration: none; transition: color 0.3s ease; cursor: pointer;">
-          Forget Password?
-        </a>
-        <a routerLink="/signup" style="font-size: 0.9em; color: #8f8f8f; text-decoration: none; transition: color 0.3s ease; cursor: pointer;">
-          Signup
-        </a>
+      <!-- Sign Up Link -->
+      <div class="text-center mt-4">
+        <p class="text-sm text-gray-800">
+          Don't have an account?
+          <a routerLink="/signup" class="text-blue-600 hover:underline">Sign Up</a>
+        </p>
       </div>
-
-      <!-- Submit Button -->
-      <input type="submit" value="Login" style="width: 100%; background: #45f3ff; border: none; outline: none; padding: 11px 25px; margin-top: 10px; border-radius: 4px; font-weight: 600; font-size: 15px; cursor: pointer; transition: background 0.3s ease, transform 0.3s ease;" onmouseover="this.style.background='#38bdf8'" onmouseout="this.style.background='#45f3ff'" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform='scale(1)'"/>
-    </form>
+    </div>
   </div>
 </div>
-
-
-
