@@ -1,2 +1,30 @@
 @import './tailwind.css';
 @import './toastr-custom.css';
+
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+    --primary-color: #8B77C9;
+    --text-color: #444;
+    --background-color: #fff;
+    --hover-color: #f0f0f0;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+    background: #4F349B; /* Purple background */
+    min-height: 100vh;
+  }
+  
+  /* You can choose different purple shades:
+  background: #9c27b0;  Material Design Purple 
+  background: #673ab7;  Deep Purple 
+  background: #7b1fa2;  Darker Purple 
+  background: #ba68c8;  Lighter Purple 
+  */
+  
+
+  
