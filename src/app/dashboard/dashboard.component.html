@@ -1,3 +1,16 @@
+<nav class="navbar">
+  <ul class="navbar-list left">
+    <li class="navbar-item logo">Logo</li>
+  </ul>
+  <ul class="navbar-list right">
+    <li class="navbar-item"><a href="#" class="navbar-link">View Event</a></li>
+    <li class="navbar-item"><a href="#" class="navbar-link">Notification</a></li>
+    <li class="navbar-item"><a href="#" class="navbar-link">Profile</a></li>
+    <li class="navbar-item"><a href="#" class="navbar-link logout">Logout</a></li>
+  </ul>
+</nav>
+
+
 <div class="calendar-container">
   <div class="calendar" [class.sidebar-closed]="isSidebarClosed" [class.rightpanel-closed]="isRightPanelClosed">
     <button class="toggle-sidebar" [class.floating]="isSidebarClosed" (click)="toggleSidebar()">
