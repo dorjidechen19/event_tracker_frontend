@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Dialog } from '@angular/cdk/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { AuthService } from '../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 interface Event {
   time: string;
@@ -29,6 +34,15 @@ export class DashboardComponent implements OnInit {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+
+  constructor(
+    private dialog: Dialog,
+    private elementRef: ElementRef,
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
+  
   events: Event[] = [
     {
       date: new Date(),
@@ -168,6 +182,23 @@ export class DashboardComponent implements OnInit {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
+    });
+  }
+
+  onLogout(): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: 'Confirm Logout',
+        message: 'Are you sure you want to log out?'
+      }
+    });
+
+    dialogRef.closed.subscribe(result => {
+      if (result) {
+        this.authService.logout();
+        this.toastr.success('Logout successful', 'Success');
+        this.router.navigate(['/login']);
+      }
     });
   }
 }
