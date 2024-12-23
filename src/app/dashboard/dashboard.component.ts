@@ -5,18 +5,20 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { AuthService } from '../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-
-interface Event {
-  time: string;
-  title: string;
-  description: string;
-  date: Date;
-}
+import { AddEventDialogComponent } from '../add-event-dialog/add-event-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { EventService } from '../services/event.service';
+import { Event as CalendarEvent } from '../models/event.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    AddEventDialogComponent,
+    ReactiveFormsModule,
+    ConfirmationDialogComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -39,29 +41,34 @@ export class DashboardComponent implements OnInit {
     private dialog: Dialog,
     private elementRef: ElementRef,
     private authService: AuthService,
+    private eventService: EventService,
     private toastr: ToastrService,
     private router: Router
   ) {}
   
-  events: Event[] = [
+  events: CalendarEvent[] = [
     {
-      date: new Date(),
-      time: '09:00 AM',
+      eventDate: new Date().toISOString(),
       title: 'Morning Meeting',
       description: 'Daily standup with the team'
     },
     {
-      date: new Date(),
-      time: '11:30 AM',
+      eventDate: new Date().toISOString(),
       title: 'Client Presentation',
       description: 'Project demo for the client'
     }
   ];
 
   ngOnInit() {
-    this.selectedDate = new Date();
-    this.generateCalendar();
-    this.addNewEvent();
+    // Check authentication on dashboard load
+    this.authService.validateToken().subscribe(isValid => {
+      if (!isValid) {
+        this.router.navigate(['/login']);
+      } else {
+        this.selectedDate = new Date();
+        this.generateCalendar();
+      }
+    });
   }
 
   generateCalendar() {
@@ -126,9 +133,9 @@ export class DashboardComponent implements OnInit {
     this.generateCalendar();
   }
 
-  getEventsForSelectedDate(): Event[] {
+  getEventsForSelectedDate(): CalendarEvent[] {
     return this.events.filter(event => 
-      this.isSameDay(event.date, this.selectedDate)
+      this.isSameDay(new Date(event.eventDate), this.selectedDate)
     );
   }
 
@@ -138,18 +145,44 @@ export class DashboardComponent implements OnInit {
            date1.getDate() === date2.getDate();
   }
 
+  //add new event
   addNewEvent() {
-    const newEvent: Event = {
-      date: new Date(this.selectedDate),
-      time: '12:00 PM',
-      title: 'New Event',
-      description: 'Event description'
-    };
-    this.events.push(newEvent);
+    const dialogRef = this.dialog.open(AddEventDialogComponent, {
+      width: '400px',
+      data: { date: this.selectedDate }
+    });
+
+    dialogRef.closed.subscribe((result: unknown) => {
+      if (result) {
+        this.eventService.createEvent(result as CalendarEvent).subscribe({
+          next: (response) => {
+            if (response && response.data) {
+              this.events.push(response.data);
+              this.dialog.open(ConfirmationDialogComponent, {
+                data: {
+                  title: 'Success',
+                  message: 'Event created successfully!'
+                }
+              });
+            }
+          },
+          error: (error) => {
+            this.dialog.open(ConfirmationDialogComponent, {
+              data: {
+                title: 'Error',
+                message: error.message || 'Failed to create event. Please try again.'
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   hasEvent(date: Date): boolean {
-    return this.events.some(event => this.isSameDay(event.date, date));
+    return this.events.some(event => 
+      this.isSameDay(new Date(event.eventDate), date)
+    );
   }
 
   selectDate(date: Date) {
@@ -195,10 +228,20 @@ export class DashboardComponent implements OnInit {
 
     dialogRef.closed.subscribe(result => {
       if (result) {
-        this.authService.logout();
-        this.toastr.success('Logout successful', 'Success');
-        this.router.navigate(['/login']);
+        this.authService.logout().subscribe({
+          next: () => {
+            this.toastr.success('Logged out successfully');
+          },
+          error: () => {
+            this.toastr.info('Logged out');
+          }
+        });
       }
     });
   }
+
+
+
+
+  
 }

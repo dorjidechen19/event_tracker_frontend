@@ -1,0 +1,26 @@
+<div class="dialog-overlay">
+  <div class="dialog-container">
+    <h2 class="dialog-title">Add New Event</h2>
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label>Title</label>
+        <input type="text" formControlName="title" placeholder="Enter event title">
+      </div>
+      
+      <div class="form-field">
+        <label>Description</label>
+        <textarea formControlName="description" rows="3" placeholder="Enter event description"></textarea>
+      </div>
+      
+      <div class="form-field">
+        <label>Date</label>
+        <input type="date" formControlName="eventDate">
+      </div>
+      
+      <div class="dialog-actions">
+        <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="!eventForm.valid">Add Event</button>
+      </div>
+    </form>
+  </div>
+</div>

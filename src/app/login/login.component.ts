@@ -39,14 +39,9 @@ export class LoginComponent {
   }
 
   ngOnInit(): void {
-    // Check if already authenticated
-    this.authService.validateToken().subscribe(isValid => {
-      if (isValid) {
-        this.router.navigate(['/dashboard']);
-      }
-    });
+    // Clear any existing auth data on login page load
+    localStorage.clear();
   }
-
 
   onSubmit(): void {
     this.submitted = true;
@@ -60,22 +55,21 @@ export class LoginComponent {
       password: this.loginForm.value.password
     };
 
+    console.log('Sending login data:', loginData); // Debug log
+
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        this.authService.setToken(response?.accessToken);
-        if (response.refreshToken) {
-          this.authService.setRefreshToken(response.refreshToken);
-        }
-
+        console.log('Login success:', response); // Debug log
         this.toastr.success('Login successful', 'Success');
         this.router.navigate(['/dashboard']);
       },
-      error: (data) => {
-        this.toastr.error(data.error?.message || 'Login failed', 'Error');
+      error: (error) => {
+        console.error('Login error:', error); // Debug log
+        const errorMessage = error.error?.message || 'Login failed';
+        this.toastr.error(errorMessage, 'Error');
       }
     });
   }
-
 
   // Getter for easy access to form fields
   get f() { return this.loginForm.controls; }
