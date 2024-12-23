@@ -1,10 +1,10 @@
-
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { LoginModel, LoginResponseModel } from '../models/login.model';
+import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
 import { ApiService } from '../api.service';
-import { Injectable } from '@angular/core';
+import { LoginModel, LoginResponseModel } from '../models/login.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,8 @@ export class AuthService {
   private REFRESH_TOKEN_KEY = 'refresh_token';
 
   constructor(
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router
   ) {}
 
   // Store tokens
@@ -45,19 +46,8 @@ export class AuthService {
   }
 
   // Validate token by calling a protected endpoint
-  validateToken(): Observable<boolean> {
-    const token = this.getToken();
-  
-    // Improved undefined and empty string checking
-    if (!token || token === 'undefined') {
-      return of(false);
-    }
-  
-    return this.apiService.get('/users/self', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).pipe(
+  validateToken(): Observable<boolean> {  
+    return this.apiService.get('/users/self').pipe(
       map(() => true),
       catchError(() => of(false))
     );
@@ -67,18 +57,21 @@ export class AuthService {
   login(loginData: LoginModel): Observable<LoginResponseModel> {
     return this.apiService.post<LoginResponseModel>('/auth/login', loginData).pipe(
       map((response: any) => {
+        console.log(response)
         // Assuming the backend returns an object with access_token and refresh_token
         this.setToken(response.data.access_token);
         this.setRefreshToken(response.data.refresh_token);
-        return response.data;
+        return response.data; 
       })
     );
   }
 
   // Logout method
-  logout(): void {
-    this.removeToken();
-    this.removeRefreshToken();
+  logout(): Observable<any> {
+    //Remove existing token
+
+    //Implement logout properly
+    return of(false);
   }
 
   // Refresh token method
@@ -91,9 +84,8 @@ export class AuthService {
       }
     }).pipe(
       map((response: any) => {
-        // Assuming the backend returns an object with access_token and refresh_token
-        this.setToken(response?.accessToken);
-        this.setRefreshToken(response?.refreshToken);
+        this.setToken(response?.data?.accessToken);
+        this.setRefreshToken(response?.data?.refreshToken);
         return response.data;
       })
     );
