@@ -1,0 +1,89 @@
+:host {
+    display: block;
+  }
+  
+  .mat-mdc-dialog-content {
+    max-height: 65vh;
+  } 
+
+  .dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dialog-container {
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    min-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .dialog-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .form-field {
+    margin-bottom: 16px;
+  }
+
+  .form-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .form-field input,
+  .form-field textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .cancel-btn {
+    background: #f0f0f0;
+    color: #333;
+  }
+
+  .submit-btn {
+    background: #8773C1;
+    color: white;
+  }
+
+  .submit-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .cancel-btn:hover {
+    background: #e4e4e4;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: #7661B8;
+  }

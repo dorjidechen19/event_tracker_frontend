@@ -3,8 +3,8 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SignupService } from '../services/signup.service';
-import { SignupModel } from '../models/signup.model';
+import { SignupService } from '../core/services/signup.service';
+import { SignupModel } from '../core/models/signup.model';
 import {ToastrModule, ToastrService} from "ngx-toastr";
 
 @Component({

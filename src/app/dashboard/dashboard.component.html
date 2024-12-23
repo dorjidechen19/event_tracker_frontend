@@ -6,7 +6,9 @@
     <li class="navbar-item"><a href="#" class="navbar-link">View Event</a></li>
     <li class="navbar-item"><a href="#" class="navbar-link">Notification</a></li>
     <li class="navbar-item"><a href="#" class="navbar-link">Profile</a></li>
-    <button (click)="onLogout()">Logout</button>
+    <li class="navbar-item">
+      <button (click)="onLogout()">Logout</button>
+    </li>
   </ul>
 </nav>
 
@@ -59,7 +61,7 @@
 
         <div *ngFor="let event of getEventsForSelectedDate()" class="event-item">
           <div class="event-time">
-            <span class="time">{{event.time}}</span>
+            <span class="time">{{event.eventDate | date:'shortTime'}}</span>
           </div>
           <div class="event-content">
             <h3 class="event-title">{{event.title}}</h3>
