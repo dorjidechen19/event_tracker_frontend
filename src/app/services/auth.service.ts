@@ -76,13 +76,9 @@ export class AuthService {
   }
 
   // Logout method
-  logout(): Observable<any> {
-    return this.apiService.post('/auth/logout', {}).pipe(
-      map(() => {
-        this.removeToken();
-        this.removeRefreshToken();
-      })
-    );
+  logout(): void {
+    this.removeToken();
+    this.removeRefreshToken();
   }
 
   // Refresh token method
