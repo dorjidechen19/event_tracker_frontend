@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SignupModel } from '../models/signup.model';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../api.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({

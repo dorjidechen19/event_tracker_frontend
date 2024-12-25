@@ -2,21 +2,23 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Dialog } from '@angular/cdk/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-
-interface Event {
-  time: string;
-  title: string;
-  description: string;
-  date: Date;
-}
+import { AddEventDialogComponent } from '../add-event-dialog/add-event-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { EventService } from '../core/services/event.service';
+import { Event as CalendarEvent } from '../core/models/event.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    AddEventDialogComponent,
+    ReactiveFormsModule,
+    ConfirmationDialogComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -39,29 +41,43 @@ export class DashboardComponent implements OnInit {
     private dialog: Dialog,
     private elementRef: ElementRef,
     private authService: AuthService,
+    private eventService: EventService,
     private toastr: ToastrService,
     private router: Router
   ) {}
   
-  events: Event[] = [
-    {
-      date: new Date(),
-      time: '09:00 AM',
-      title: 'Morning Meeting',
-      description: 'Daily standup with the team'
-    },
-    {
-      date: new Date(),
-      time: '11:30 AM',
-      title: 'Client Presentation',
-      description: 'Project demo for the client'
-    }
-  ];
+  events: CalendarEvent[] = [];
+
+ 
 
   ngOnInit() {
-    this.selectedDate = new Date();
-    this.generateCalendar();
-    this.addNewEvent();
+    // Check authentication on dashboard load
+    this.authService.validateToken().subscribe(isValid => {
+      if (!isValid) {
+        this.router.navigate(['/login']);
+      } else {
+        this.selectedDate = new Date();
+        this.generateCalendar();
+        this.eventService.fetchEvents().subscribe({
+          next: (response) => {
+            this.events = response.data.events.map((event: any) => ({
+              id: event.id,
+              title: event.title,
+              description: event.description,
+              eventDate: event.eventDate, // Can handle transformation here if needed
+            }));
+          },
+          error: (error) => {
+            this.dialog.open(ConfirmationDialogComponent, {
+              data: {
+                title: 'Error',
+                message: error.message || 'Error fetching events. Please try again.'
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   generateCalendar() {
@@ -126,9 +142,9 @@ export class DashboardComponent implements OnInit {
     this.generateCalendar();
   }
 
-  getEventsForSelectedDate(): Event[] {
+  getEventsForSelectedDate(): CalendarEvent[] {
     return this.events.filter(event => 
-      this.isSameDay(event.date, this.selectedDate)
+      this.isSameDay(new Date(event.eventDate), this.selectedDate)
     );
   }
 
@@ -138,18 +154,46 @@ export class DashboardComponent implements OnInit {
            date1.getDate() === date2.getDate();
   }
 
+  //add new event
   addNewEvent() {
-    const newEvent: Event = {
-      date: new Date(this.selectedDate),
-      time: '12:00 PM',
-      title: 'New Event',
-      description: 'Event description'
-    };
-    this.events.push(newEvent);
+    const dialogRef = this.dialog.open(AddEventDialogComponent, {
+      width: '400px',
+      data: { date: this.selectedDate }
+    });
+
+    dialogRef.closed.subscribe({
+      next: (result: unknown) => {
+        const event = result as CalendarEvent;  // Type assertion to CalendarEvent
+        if (event) {
+          this.eventService.createEvent(event).subscribe({
+            next: (response) => {
+              // Add the new event to the events list
+              this.events.push(event);
+  
+              // Optionally: Update the events for the selected date to reflect the new event
+              // this.toastr.success('Event added successfully!', 'Success');
+            },
+            error: (error) => {
+              this.dialog.open(ConfirmationDialogComponent, {
+                data: {
+                  title: 'Error',
+                  message: error.message || 'Failed to create event. Please try again.'
+                }
+              });
+            }
+          });
+        }
+      },
+      error: (error) => {
+        this.toastr.error('Error processing the event', 'Error');
+      }
+    });
   }
 
   hasEvent(date: Date): boolean {
-    return this.events.some(event => this.isSameDay(event.date, date));
+    return this.events.some(event => 
+      this.isSameDay(new Date(event.eventDate), date)
+    );
   }
 
   selectDate(date: Date) {
@@ -201,4 +245,9 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+
+
+
+  
 }
