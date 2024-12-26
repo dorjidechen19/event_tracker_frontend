@@ -1,6 +1,7 @@
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e]">
   <!-- Form Container -->
-  <div class="w-full max-w-sm relative bg-white shadow-xl overflow-hidden" style="box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);">
+  <div class="w-full max-w-sm relative bg-white shadow-xl overflow-hidden"
+    style="box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);">
 
     <!-- Create Account Header Area (White Background) -->
     <div class="bg-white text-[#663399] text-center py-6">
@@ -8,16 +9,25 @@
     </div>
 
     <!-- Form Section (Purple Background with Curved Top) -->
-    <div class="bg-[#663399] px-8 py-4 shadow-lg" style="border-top-left-radius: 60% 60px; border-top-right-radius: 60% 60px; padding-top: 40px;">
+    <div class="bg-[#663399] px-8 py-4 shadow-lg"
+      style="border-top-left-radius: 60% 60px; border-top-right-radius: 60% 60px; padding-top: 40px;">
       <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <!-- username field -->
+        <div class="mb-6">
+          <label for="username" class="block text-lg font-semibold text-white mb-2">Username</label>
+          <input id="username" formControlName="username" type="text"
+            class="w-full h-10 bg-gray-100 text-black rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your username">
+          <div *ngIf="submitted && f['email'].errors" class="text-sm text-red-500 mt-2">
+            <small *ngIf="f['email'].errors['required']">Name is required</small>
+          </div>
+        </div>
 
         <!-- Email Field -->
         <div class="mb-6">
           <label for="email" class="block text-lg font-semibold text-white mb-2">Email</label>
-          <input
-            id="email"
-            formControlName="email"
-            type="email"
+          <input id="email" formControlName="email" type="email"
             class="w-full h-10 bg-gray-100 text-black rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your email">
           <div *ngIf="submitted && f['email'].errors" class="text-sm text-red-500 mt-2">
@@ -29,10 +39,7 @@
         <!-- Password Field -->
         <div class="mb-6">
           <label for="password" class="block text-lg font-semibold text-white mb-2">Password</label>
-          <input
-            id="password"
-            formControlName="password"
-            type="password"
+          <input id="password" formControlName="password" type="password"
             class="w-full h-10 bg-gray-100 text-black rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter your password">
           <div *ngIf="submitted && f['password'].errors" class="text-sm text-red-500 mt-2">
@@ -44,10 +51,7 @@
         <!-- Confirm Password Field -->
         <div class="mb-6">
           <label for="confirmPassword" class="block text-lg font-semibold text-white mb-2">Confirm Password</label>
-          <input
-            id="confirmPassword"
-            formControlName="confirmPassword"
-            type="password"
+          <input id="confirmPassword" formControlName="confirmPassword" type="password"
             class="w-full h-10 bg-gray-100 text-black rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Confirm your password">
           <div *ngIf="submitted && f['confirmPassword'].errors" class="text-sm text-red-500 mt-2">
@@ -59,8 +63,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button
-          type="submit"
+        <button type="submit"
           class="w-full h-10 bg-[#573b8a] text-white font-semibold rounded-md transition duration-300 transform hover:bg-[#6d44b8] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
           Sign Up
         </button>

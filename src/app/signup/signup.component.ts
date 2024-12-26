@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { SignupService } from '../core/services/signup.service';
 import { SignupModel } from '../core/models/signup.model';
 import {ToastrModule, ToastrService} from "ngx-toastr";
+import { validateHeaderName } from 'http';
 
 @Component({
   selector: 'app-signup',
@@ -31,6 +32,9 @@ export class SignupComponent {
     private toastr: ToastrService
   ) {
     this.signupForm = this.formBuilder.group({
+      username:['',[
+        Validators.required
+      ]],
       email: ['', [
         Validators.required,
         Validators.email
@@ -62,6 +66,7 @@ export class SignupComponent {
     }
 
     const signupData: SignupModel = {
+      username: this.signupForm.value.username,
       email: this.signupForm.value.email,
       password: this.signupForm.value.password
     };
