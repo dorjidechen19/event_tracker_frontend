@@ -65,17 +65,21 @@ export class LoginComponent {
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        console.log('Login success:', response); // Debug log
+        this.authService.setToken(response?.accessToken);
+        if (response.refreshToken) {
+          this.authService.setRefreshToken(response.refreshToken);
+        }
+
         this.toastr.success('Login successful', 'Success');
         this.router.navigate(['/dashboard']);
       },
-      error: (error) => {
-        console.error('Login error:', error); // Debug log
-        const errorMessage = error.error?.message || 'Login failed';
-        this.toastr.error(errorMessage, 'Error');
+      error: (data) => {
+        this.toastr.error(data.error?.message || 'Login failed', 'Error');
       }
     });
   }
+
+
 
   // Getter for easy access to form fields
   get f() { return this.loginForm.controls; }

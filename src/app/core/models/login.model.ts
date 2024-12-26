@@ -4,8 +4,11 @@ export interface LoginModel {
 }
 
 export interface LoginResponseModel {
-  status: boolean;
-  data: {
-    access_token: string;
-  }
+  accessToken: string;
+  refreshToken?: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
 }
