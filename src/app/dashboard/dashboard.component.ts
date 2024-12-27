@@ -8,7 +8,9 @@ import { Router } from '@angular/router';
 import { AddEventDialogComponent } from '../add-event-dialog/add-event-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EventService } from '../core/services/event.service';
-import { Event as CalendarEvent } from '../core/models/event.model';
+import { Event as Event } from '../core/models/event.model';
+import { ViewEventDialogComponent } from 'app/view-event-dialog/view-event-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -43,10 +45,11 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private eventService: EventService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private modal: MatDialog
   ) {}
   
-  events: CalendarEvent[] = [];
+  events: Event[] = [];
 
  
 
@@ -142,7 +145,7 @@ export class DashboardComponent implements OnInit {
     this.generateCalendar();
   }
 
-  getEventsForSelectedDate(): CalendarEvent[] {
+  getEventsForSelectedDate(): Event[] {
     return this.events.filter(event => 
       this.isSameDay(new Date(event.eventDate), this.selectedDate)
     );
@@ -160,34 +163,16 @@ export class DashboardComponent implements OnInit {
       width: '400px',
       data: { date: this.selectedDate }
     });
+  }
 
-    dialogRef.closed.subscribe({
-      next: (result: unknown) => {
-        const event = result as CalendarEvent;  // Type assertion to CalendarEvent
-        if (event) {
-          this.eventService.createEvent(event).subscribe({
-            next: (response) => {
-              // Add the new event to the events list
-              this.events.push(event);
-  
-              // Optionally: Update the events for the selected date to reflect the new event
-              // this.toastr.success('Event added successfully!', 'Success');
-            },
-            error: (error) => {
-              this.dialog.open(ConfirmationDialogComponent, {
-                data: {
-                  title: 'Error',
-                  message: error.message || 'Failed to create event. Please try again.'
-                }
-              });
-            }
-          });
-        }
-      },
-      error: (error) => {
-        this.toastr.error('Error processing the event', 'Error');
-      }
-    });
+  isPastDate(date: Date): boolean {
+    const today = new Date();
+    // Set today's time to 00:00:00 for an accurate comparison
+    today.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(date);
+    selectedDate.setHours(0, 0, 0, 0);
+    
+    return selectedDate < today;
   }
 
   hasEvent(date: Date): boolean {
@@ -246,8 +231,40 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
-
-
+  openViewEventDialog(event: Event) {
+    const dialogRef = this.modal.open(ViewEventDialogComponent, {
+      width: '400px',
+      data: { event }
+    });
   
-}
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed');
+    });
+  }
+
+  deleteEvent(event: Event) {
+    if (event.id !== undefined) {  // Check if the id is defined
+      const confirmation = confirm('Are you sure you want to delete this event?');
+      if (confirmation) {
+        this.eventService.deleteEvent(event.id).subscribe({
+          next: () => {
+            // Remove the event from the events array
+            this.events = this.events.filter(e => e.id !== event.id);
+            this.toastr.success('Event deleted successfully', 'Success');
+            
+            // Optionally close the dialog after deletion
+            this.modal.closeAll();
+          },
+          error: (error) => {
+            const errorMessage = error.error?.message || 'Failed to delete event';
+            this.toastr.error(errorMessage, 'Error');
+          }
+        });
+      }
+    } else {
+      this.toastr.error('Invalid event ID', 'Error');
+    }
+  }
+  
+} 
+ 

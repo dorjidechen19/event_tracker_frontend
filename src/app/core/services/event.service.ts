@@ -29,13 +29,18 @@ export class EventService {
     return  this.apiService.get<any>("/events");
 
   }
+    // Update event
+    updateEvent(id: number, event: Event): Observable<any> {
+      return this.apiService.put(`/api/v1/events/${id}`, event);
+    }
 
-  deleteEvent(id: number): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.apiService.delete<any>(`/events/${id}`, { headers });
-  }
+    deleteEvent(id: number): Observable<any> {
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+      return this.apiService.delete<any>(`/events/${id}`, { headers });
+    }
+    
 
   getEventById(id: number): Observable<any> {
     const token = localStorage.getItem('token');
