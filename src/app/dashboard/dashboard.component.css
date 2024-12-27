@@ -457,7 +457,8 @@
   color: #8773C1; /* Highlight on hover */
 }
 
-.logout {
+.logout-btn {
   font-weight: bold;
   color: #fd0505; /* Logout-specific color */
 }
+

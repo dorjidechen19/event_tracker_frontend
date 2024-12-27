@@ -59,6 +59,18 @@ export class ViewEventDialogComponent {
     }
   }
 
+  saveEvent() {
+    this.eventService.updateEvent(this.data.event.id, this.data.event).subscribe({
+      next: () => {
+        this.toastr.success('Event updated successfully');
+        this.dialogRef.close(this.data.event);
+      },
+      error: (error) => {
+        this.toastr.error(error.error?.message || 'Failed to update event');
+      }
+    });
+  }
+  
   onClose(): void {
     this.dialogRef.close();
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, catchError } from 'rxjs/operators';
 import { HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Event, EventResponse } from '../models/event.model';
 import { ApiService } from '../../api.service';
@@ -29,10 +29,19 @@ export class EventService {
     return  this.apiService.get<any>("/events");
 
   }
-    // Update event
-    updateEvent(id: number, event: Event): Observable<any> {
-      return this.apiService.put(`/api/v1/events/${id}`, event);
-    }
+  updateEvent(id: number, event: Event): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
+  
+    return this.apiService.put<any>(`/events/${id}`, event, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error updating event:', error);  // Log the error to the console
+        return throwError(() => new Error(error.message || 'Failed to update event'));
+      })
+    );
+  }
 
     deleteEvent(id: number): Observable<any> {
       const token = localStorage.getItem('token');
