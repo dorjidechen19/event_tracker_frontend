@@ -3,7 +3,6 @@
     <li class="navbar-item logo">Logo</li>
   </ul>
   <ul class="navbar-list right">
-    <li class="navbar-item"><a href="#" class="navbar-link">View Event</a></li>
     <li class="navbar-item"><a href="#" class="navbar-link">Notification</a></li>
     <li class="navbar-item"><a href="#" class="navbar-link">Profile</a></li>
     <li class="navbar-item">
@@ -59,18 +58,18 @@
           </div>
         </div>
 
-        <div *ngFor="let event of getEventsForSelectedDate()" class="event-item">
+        <div *ngFor="let event of getEventsForSelectedDate()" class="event-item" (click)="openViewEventDialog(event)">
           <div class="event-time">
-            <span class="time">{{event.eventDate | date:'shortTime'}}</span>
+            <span class="time">{{ event.eventDate | date:'shortDate' }}</span>
           </div>
+          
           <div class="event-content">
             <h3 class="event-title">{{event.title}}</h3>
             <p class="event-description">{{event.description}}</p>
           </div>
         </div>
-      </div>
-
-      <button class="add-event-btn" (click)="addNewEvent()">
+        
+      <button class="add-event-btn" (click)="addNewEvent()" [disabled]="isPastDate(selectedDate)">
         <span class="plus-icon">+</span>
         <span class="btn-text">Add Event</span>
       </button>

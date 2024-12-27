@@ -1,0 +1,87 @@
+/* Style the mat-dialog content */
+mat-dialog-content {
+    padding: 20px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Style the form fields */
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  /* Style the labels */
+  mat-label {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* Input and textarea fields */
+  input, textarea {
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Style the dialog action buttons */
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    background-color: #fafafa;
+  }
+  
+  /* Style the buttons */
+  button {
+    margin: 0 5px;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+  
+  button.mat-button {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  button.mat-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Style for Delete button */
+  button.mat-button:first-child {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  button.mat-button:first-child:hover {
+    background-color: #c82333;
+  }
+  
+  /* Style the Cancel button */
+  button.mat-button:nth-child(2) {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  button.mat-button:nth-child(2):hover {
+    background-color: #5a6268;
+  }
+  
+  /* Adjust the dialog title */
+  mat-dialog-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Ensure the dialog's overall layout */
+  ::ng-deep .mat-dialog-container {
+    width: 400px;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
