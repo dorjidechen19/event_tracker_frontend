@@ -5,6 +5,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ToastrService } from 'ngx-toastr';
 import { EventService } from '@core/services/event.service';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-event-dialog',
@@ -14,7 +16,8 @@ import { EventService } from '@core/services/event.service';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    SweetAlert2Module
   ],
   templateUrl: './view-event-dialog.component.html',
   styleUrls: ['./view-event-dialog.component.css']
@@ -42,22 +45,36 @@ export class ViewEventDialogComponent {
     this.error = null;
   }
 
-  deleteEvent() {
-    const confirmation = confirm('Are you sure you want to delete this event?');
-    if (confirmation) {
-      this.eventService.deleteEvent(this.data.event.id).subscribe({
-        next: () => {
-          this.toastr.success('Event deleted successfully', 'Success');
-          this.eventService.deleteEvent(this.data.event); // Call the deleteEvent method from DashboardComponent
-          this.dialogRef.close(null); // Close the dialog after deletion
-        },
-        error: (error) => {
-          const errorMessage = error.error?.message || 'Failed to delete event';
-          this.toastr.error(errorMessage, 'Error');
-        }
-      });
-    }
+  deleteEvent(): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eventService.deleteEvent(this.data.event.id).subscribe({
+          next: () => {
+            this.eventService.deleteEvent(this.data.event); // Call the deleteEvent method from DashboardComponent
+            this.dialogRef.close(null); // Close the dialog after deletion
+          },
+          error: (error) => {
+            const errorMessage = error.error?.message || 'Failed to delete event';
+            this.toastr.error(errorMessage, 'Error');
+          }
+        });
+        // Perform delete action
+        console.log('Event deleted:', this.data.event);
+        this.dialogRef.close('deleted'); // Optionally close the parent dialog
+        Swal.fire('Deleted!', 'Your event has been deleted.', 'success');
+      }
+    });
   }
+
 
   saveEvent() {
     this.eventService.updateEvent(this.data.event.id, this.data.event).subscribe({
