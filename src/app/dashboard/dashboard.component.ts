@@ -17,9 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
   standalone: true,
   imports: [
     CommonModule,
-    AddEventDialogComponent,
     ReactiveFormsModule,
-    ConfirmationDialogComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
