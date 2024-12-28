@@ -35,7 +35,7 @@
   <button 
     mat-button 
     class="bg-blue-500 text-white hover:bg-blue-600 transition-all"
-    [mat-dialog-close]="data.event">
+    [mat-dialog-close]="data.event" (click)="saveEvent()">
     Save
   </button>
 </div>
