@@ -164,14 +164,18 @@ export class DashboardComponent implements OnInit {
   }
 
   isPastDate(date: Date): boolean {
-    const today = new Date();
-    // Set today's time to 00:00:00 for an accurate comparison
-    today.setHours(0, 0, 0, 0);
-    const selectedDate = new Date(date);
-    selectedDate.setHours(0, 0, 0, 0);
-    
-    return selectedDate < today;
+  const today = new Date();
+  // Set today's time to 00:00:00 for an accurate comparison
+  today.setHours(0, 0, 0, 0);
+  const selectedDate = new Date(date);
+  selectedDate.setHours(0, 0, 0, 0);
+
+  if (selectedDate < today) {
+    this.toastr.warning('Past date cannot be added', 'Warning');
+    return true;
   }
+  return false;
+}
 
   hasEvent(date: Date): boolean {
     return this.events.some(event => 
